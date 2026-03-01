@@ -12,6 +12,13 @@
   <meta property="og:title" content="Opeyemi Abigail Babarinde | Senior Project Manager & Scrum Master" />
   <meta property="og:description" content="I help teams deliver impactful projects through clear communication, structured processes, and seamless collaboration." />
   <link rel="canonical" href="https://opebabarinde.com/" />
+  <ul class="nav-links">
+  <li><a href="#summary" data-target="summary">Summary</a></li>
+  <li><a href="#skills" data-target="skills">Skills</a></li>
+  <li><a href="#case-studies" data-target="case-studies">Case Studies</a></li>
+  <li><a href="#testimonials" data-target="testimonials">Testimonials</a></li>
+  <li><a href="#contact" class="ncta" data-target="contact">Contact</a></li>
+</ul>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -78,11 +85,17 @@
     .hb { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
     .hb span { display: block; width: 22px; height: 2px; background: var(--ink); border-radius: 2px; transition: all 0.3s; }
     
-    /* ── SECTION NAV DOTS ── */
-    .section-progress { position: auto; right: 1.5rem; top: 50%; transform: translateY(-50%); z-index: 1; pointer-events: auto; }
-    .sp-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(139,114,216,0.25); border: none; cursor: pointer; transition: all 0.3s; padding: 0; pointer-events: auto; }
-    .sp-dot.active { background: var(--lilac-deep); transform: scale(1.5); }
-    .sp-dot:hover { background: var(--lilac-mid); }
+    /* ACTIVE NAV STATE */
+.nav-links a.active {
+  color: var(--lilac-deep);
+  background: var(--lilac-soft);
+}
+
+/* Optional: special styling for Contact button when active */
+.nav-links a.ncta.active {
+  background: var(--lilac-deep) !important;
+  color: white !important;
+}
 
     /* ── SHARED ── */
     .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
@@ -896,23 +909,25 @@
     
   // Section Dots
     const sections = ['hero','summary','profile','skills','credentials','case-studies','tools','testimonials','contact'];
-const dots = document.querySelectorAll('.sp-dot');
+const navLinks = document.querySelectorAll('.nav-links a');
 
-dots.forEach(dot => {
-  dot.addEventListener('click', () => {
-    document.getElementById(dot.dataset.target).scrollIntoView({ behavior: 'smooth' });
-  });
-});
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
 
-const dotObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      dots.forEach(d => d.classList.remove('active'));
-      const match = document.querySelector(`.sp-dot[data-target="${e.target.id}"]`);
-      if (match) match.classList.add('active');    }
+      navLinks.forEach(link => {
+        link.classList.remove("active");
+
+        if (link.dataset.target === id) {
+          link.classList.add("active");
+        }
       });
-    }, { threshold: 0.4 });
-    sections.forEach(id => { const el = document.getElementById(id); if (el) dotObs.observe(el); });
+    }
+  });
+}, {
+    }, { threshold: 0.6 });
+    sections.forEach(section => observer.observe(section));
   </script>
 </body>
 </html>
