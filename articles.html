@@ -35,6 +35,10 @@
     .nav-links a:hover, .nav-links a.active { color: var(--lilac-deep); background: var(--lilac-soft); }
     .nav-links .ncta { background: var(--ink) !important; color: var(--white) !important; padding: 0.5rem 1.2rem !important; margin-left: 0.5rem; }
     .nav-links .ncta:hover { background: var(--lilac-deep) !important; }
+    
+    /* HAMBURGER */
+    .hamburger {display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: var(--ink); transition: all 0.3s ease; }
 
 
     /* PAGE HEADER */
@@ -124,20 +128,46 @@
     @media (max-width: 600px) {
       .articles-grid { grid-template-columns: 1fr; }
       .header-meta { gap: 1.5rem; }
-    }
+      @media (max-width: 900px) {
+  .articles-grid { grid-template-columns: 1fr 1fr; }
+  .article-card.featured { grid-column: 1 / -1; grid-template-columns: 1fr; }
+  .article-card.featured .article-card-visual { min-height: 200px; }
+}
+
+    /* Mobile Mav */
+  @media (max-width: 768px) {
+
+    /* Show hamburger */
+  .hamburger { display: flex; }
+
+  /* Hide desktop nav */
+  .nav-links { position: fixed; top: 70px; right: -100%; flex-direction: column; background: var(--white); width: 240px; height: calc(100vh - 70px); padding: 2rem; gap: 1.5rem; transition: right 0.3s ease; box-shadow: -10px 0 30px rgba(0,0,0,0.08);  }
+  .nav-links.active { right: 0; }
+  .articles-grid { grid-template-columns: 1fr; }
+  .header-meta { gap: 1.5rem;  }
+   }
+  }
   </style>
 </head>
 <body>
 
-  <nav>
-    <a class="nav-logo" href="index.html">Ope <span>Babarinde</span></a>
-    <ul class="nav-links">
-      <li><a href="index.html#summary">Portfolio</a></li>
-      <li><a href="index.html#case-studies">Case Studies</a></li>
-      <li><a href="articles.html" class="active">Articles</a></li>
-      <li><a href="index.html#contact" class="ncta">Contact</a></li>
-    </ul>
-  </nav>
+<nav>
+  <a class="nav-logo" href="index.html">Ope <span>Babarinde</span></a>
+
+  <!-- Hamburger Button -->
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html#summary">Portfolio</a></li>
+    <li><a href="index.html#case-studies">Case Studies</a></li>
+    <li><a href="articles.html" class="active">Articles</a></li>
+    <li><a href="index.html#contact" class="ncta">Contact</a></li>
+  </ul>
+</nav>
   
   <!-- PAGE HEADER -->
   <header class="page-header">
@@ -327,6 +357,14 @@
         filterArticles(btn.getAttribute('data-filter'));
       });
     });  
+    
+    // Hamburger toggle
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+
+hamburger.addEventListener('click', () => {
+  navLinks.classList.toggle('active');
+});
   </script>
 </body>
 </html>
