@@ -141,6 +141,15 @@
  .nav-links a.active { color: var(--lilac-deep); background: var(--lilac-soft); }
  .nav-links a:hover { color: var(--lilac-deep); background: var(--lilac-soft); }
  .hb { display: flex; }
+ 
+   /* Fix featured article on mobile */
+.article-card.featured {
+  grid-template-columns: 1fr;
+}
+
+.article-card.featured .article-card-visual {
+  min-height: 220px;
+}
 }
   </style>
 </head>
@@ -387,4 +396,5 @@ document.querySelectorAll('.nav-links a').forEach(link => {
 });
   </script>
 </body>
+
 </html>
