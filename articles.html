@@ -133,23 +133,33 @@
   .nav-overlay { position: fixed; inset: 0; background: rgba(17,17,24,0.35); backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 198; }
   .nav-overlay.active { opacity: 1; pointer-events: all; }
 
- /* Mobile Nav */
- @media (max-width: 700px) {
- .nav-links { position: fixed; top: 0; right: -100%; width: 280px; height: 100vh; background: var(--white); flex-direction: column; padding: 6rem 2rem 2rem; gap: 1.5rem; box-shadow: -20px 0 60px rgba(0,0,0,0.08); transition: right 0.4s cubic-bezier(.77,0,.18,1); z-index: 250; }
- .nav-links.open { right: 0; }
- .nav-links a { font-size: 0.8rem; font-weight: 500; text-decoration: none; color: var(--ink-muted); transition: color 0.2s; padding: 0.4rem 0.8rem; border-radius: 6px;  }
- .nav-links a.active { color: var(--lilac-deep); background: var(--lilac-soft); }
- .nav-links a:hover { color: var(--lilac-deep); background: var(--lilac-soft); }
- .hb { display: flex; }
- 
-  {
+/* Mobile Styles */
+@media (max-width: 700px) {
 
-/* Fix featured article on mobile */
-.article-card.featured { grid-template-columns: 1fr; }
-.article-card.featured .article-card-visual { min-height: 220px; }
-  </style>
-</head>
-<body>
+  /* Mobile Nav */
+  .nav-links { position: fixed; top: 0; right: -100%; width: 280px; height: 100vh; background: var(--white); flex-direction: column; padding: 6rem 2rem 2rem; gap: 1.5rem; box-shadow: -20px 0 60px rgba(0,0,0,0.08); transition: right 0.4s cubic-bezier(.77,0,.18,1); z-index: 250; }
+  .nav-links.open { right: 0; }
+  .nav-links a { font-size: 0.9rem; padding: 0.6rem 0.8rem; }
+  .hb { display: flex; }
+
+  /* Make grid single column */
+  .articles-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+
+  /* Stack featured card */
+  .article-card.featured { grid-template-columns: 1fr; }
+  .article-card.featured .article-card-visual { min-height: 220px; }
+  .article-card.featured .article-card-body { padding: 1.6rem; }
+
+  /* Optimize ALL cards (including coming soon) */
+  .article-card { border-radius: 1rem; }
+  .article-card-body { padding: 1.5rem !important; }
+  .article-title { font-size: 1.05rem; line-height: 1.35; }
+  .article-excerpt { font-size: 0.85rem; line-height: 1.6;  }
+
+  /* Coming soon adjustments */
+  .article-card.coming-soon { background: rgba(237,232,253,0.25); }
+  .coming-badge { font-size: 0.6rem; padding: 0.25rem 0.7rem;}
+}
 
 <nav>
   <a class="nav-logo" href="index.html">Ope <span>Babarinde</span></a>
@@ -394,6 +404,7 @@ document.querySelectorAll('.nav-links a').forEach(link => {
 </body>
 
 </html>
+
 
 
 
