@@ -142,11 +142,24 @@
  .nav-links a:hover { color: var(--lilac-deep); background: var(--lilac-soft); }
  .hb { display: flex; }
  
-   /* Fix featured article on mobile */
-.article-card.featured {
-  grid-template-columns: 1fr;
-}
+  {
 
+  /* Make grid single column */
+  .articles-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+
+  /* Stack featured card */
+  .article-card.featured { grid-template-columns: 1fr; }
+  .article-card.featured .article-card-visual { min-height: 220px; }
+  .article-card.featured .article-card-body { padding: 1.8rem; }
+
+  /* Improve regular & coming soon cards */
+  .article-card { border-radius: 1rem; }
+  .article-card-body { padding: 1.5rem; }
+  .coming-badge { font-size: 0.6rem; }
+  .article-title { font-size: 1rem; }
+  .article-excerpt { font-size: 0.85rem; }
+
+}
 .article-card.featured .article-card-visual {
   min-height: 220px;
 }
@@ -398,3 +411,4 @@ document.querySelectorAll('.nav-links a').forEach(link => {
 </body>
 
 </html>
+
