@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     category: "career-growth",
     tag: "🤝 Career & Growth",
     excerpt: "The technical side of delivery is learnable...",
-    comingSoon: true
+    reveal: true
   },
 
   {
