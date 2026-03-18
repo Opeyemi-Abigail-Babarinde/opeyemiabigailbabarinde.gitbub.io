@@ -56,12 +56,7 @@
     .header-stat-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 0.2rem; }
 
     /* FILTERS */
-    .filters-bar { background: var(--white); border-bottom: 1px solid rgba(196,181,244,0.15); padding: 1rem 5vw; display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; <input 
-  type="text" 
-  id="searchInput" 
-  placeholder="Search articles..."
-  style="margin-left:auto; padding:0.5rem 0.9rem; border-radius:6px; border:1px solid rgba(196,181,244,0.3); font-size:0.75rem; width:200px;"
-/> }
+    .filters-bar { background: var(--white); border-bottom: 1px solid rgba(196,181,244,0.15); padding: 1rem 5vw; display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
     .filter-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); margin-right: 0.5rem; }
     .filter-btn { font-size: 0.75rem; font-weight: 600; padding: 0.4rem 1rem; border-radius: 100px; border: 1px solid rgba(196,181,244,0.3); background: transparent; color: var(--ink-muted); cursor: pointer; transition: all 0.2s; font-family: var(--sans); }
     .filter-btn:hover, .filter-btn.active { background: var(--lilac-soft); border-color: var(--lilac-mid); color: var(--lilac-deep); }
@@ -77,7 +72,7 @@
 
     /* ARTICLES GRID */
     .articles-wrap { padding: 5rem 5vw; }
-    .articles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: start; }
+    .articles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
 
     /* ARTICLE CARD */
     .article-card { background: var(--white); border-radius: 1.2rem; border: 1px solid rgba(196,181,244,0.15); overflow: hidden; transition: all 0.3s; display: flex; flex-direction: column; }
@@ -149,13 +144,7 @@
 
   /* Make grid single column */
   .articles-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-</div>
-  
-/*correct placement*/
-<div style="text-align:center; margin-top:2rem;">
-  <button id="loadMoreBtn" class="filter-btn">Load more</button>
-</div>
-  
+
   /* Stack featured card */
   .article-card.featured { grid-template-columns: 1fr; }
   .article-card.featured .article-card-visual { min-height: 220px; }
@@ -222,9 +211,6 @@
   <main class="articles-wrap">
     <p class="articles-count" id="articlesCount"><strong id="visibleCount">4</strong> articles</p>
     <div class="articles-grid" id="articlesGrid">
-    <div style="text-align:left; margin-top:2rem;">
-  <button id="loadMoreBtn" class="filter-btn">Load more</button>
-</div>
 
       <!-- FEATURED ARTICLE -->
       <article class="article-card featured reveal" data-category="agile-delivery">
@@ -265,7 +251,30 @@
           </div>
         </div>
       </article>
-<script src="articles.js"></script>
+
+      <article class="article-card coming-soon reveal" data-category="career-growth" style="transition-delay:0.15s">
+        <div class="article-card-body" style="padding:2rem;">
+          <span class="coming-badge">Coming soon</span>
+          <h2 class="article-title">From Coordinator to Senior PM: What Actually Changes</h2>
+          <p class="article-excerpt">The jump to Senior isn't just about doing more work — it's about shifting from execution to ownership. Here's what that really means day-to-day.</p>
+          <div class="article-footer">
+            <span class="article-tag" style="margin:0;">📈 Career & Growth</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card coming-soon reveal" data-category="process-tools" style="transition-delay:0.2s">
+        <div class="article-card-body" style="padding:2rem;">
+          <span class="coming-badge">Coming soon</span>
+          <h2 class="article-title">How I Built a Client Portal That Cut Email Back-and-Forth by Half</h2>
+          <p class="article-excerpt">A practical walkthrough of the Notion-based client portal system I built, why it worked, and how you can replicate it for your own projects.</p>
+          <div class="article-footer">
+            <span class="article-tag" style="margin:0;">⚙️ Process & Tools</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
   </main>
 
   <!-- NEWSLETTER / CONNECT -->
@@ -295,116 +304,43 @@
 
     // ── WORKING FILTERS ──
     const filterBtns = document.querySelectorAll('[data-filter]');
-const articleCards = Array.from(document.querySelectorAll('.articles-grid .article-card'));
-const visibleCountEl = document.getElementById('visibleCount');
-const grid = document.getElementById('articlesGrid');
-const searchInput = document.getElementById('searchInput');
-const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const articleCards = document.querySelectorAll('.articles-grid .article-card');
+    const visibleCountEl = document.getElementById('visibleCount');
+    const grid = document.getElementById('articlesGrid');
 
-let activeFilter = 'all';
-let searchQuery = '';
-let visibleLimit = 4; // initial visible articles
+    // Add count badges to each filter button on load
+    filterBtns.forEach(function(btn) {
+      var filter = btn.getAttribute('data-filter');
+      var count = filter === 'all'
+        ? articleCards.length
+        : [].filter.call(articleCards, function(c) { return c.getAttribute('data-category') === filter; }).length;
+      var badge = document.createElement('span');
+      badge.className = 'filter-count';
+      badge.textContent = count;
+      btn.appendChild(badge);
+    });
 
-function createArticleCard(article) {
-  if (article.comingSoon) {
-    return `
-      <article class="article-card coming-soon reveal" data-category="${article.category}">
-        <div class="article-card-body" style="padding:2rem;">
-          <span class="coming-badge">Coming soon</span>
-          <h2 class="article-title">${article.title}</h2>
-          <p class="article-excerpt">${article.excerpt}</p>
-          <div class="article-footer">
-            <span class="article-tag" style="margin:0;">${article.tag}</span>
-          </div>
-        </div>
-      </article>
-    `;
-  }
+    function filterArticles(activeFilter) {
+      // Remove any existing empty state
+      var existing = grid.querySelector('.no-results');
+      if (existing) existing.remove();
 
-  if (article.featured) {
-    return `
-      <article class="article-card featured reveal" data-category="${article.category}">
-        <div class="article-card-visual" style="background: linear-gradient(135deg, #1a1228, #2d1f4e);"></div>
-        <div class="article-card-body">
-          <span class="article-tag">${article.tag}</span>
-          <h2 class="article-title">${article.title}</h2>
-          <p class="article-excerpt">${article.excerpt}</p>
-          <div class="article-footer">
-            <div>
-              <div class="article-date">${article.date}</div>
-              <div class="article-read-time">${article.readTime}</div>
-            </div>
-            <a href="${article.link}" class="article-read-link">Read article →</a>
-          </div>
-        </div>
-      </article>
-    `;
-  }
+      var visible = 0;
+      articleCards.forEach(function(card) {
+        var cat = card.getAttribute('data-category');
+        var show = activeFilter === 'all' || cat === activeFilter;
+        if (show) {
+          card.classList.remove('hidden');
+          visible++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
 
-  return `
-    <article class="article-card reveal" data-category="${article.category}">
-      <div class="article-card-body">
-        <span class="article-tag">${article.tag}</span>
-        <h2 class="article-title">${article.title}</h2>
-        <p class="article-excerpt">${article.excerpt}</p>
-        <div class="article-footer">
-          <div>
-            <div class="article-date">${article.date}</div>
-            <div class="article-read-time">${article.readTime}</div>
-          </div>
-          <a href="${article.link}" class="article-read-link">Read article →</a>
-        </div>
-      </div>
-    </article>
-  `;
-}
+      // Update count text
+      visibleCountEl.textContent = visible;
 
-function renderArticles(list) {
-  grid.innerHTML = list.map(createArticleCard).join('');
-}
-
-// Add count badges
-filterBtns.forEach(btn => {
-  const filter = btn.getAttribute('data-filter');
-
-  const count = filter === 'all'
-    ? articleCards.length
-    : articleCards.filter(card => card.dataset.category === filter).length;
-
-  const badge = document.createElement('span');
-  badge.className = 'filter-count';
-  badge.textContent = count;
-
-  btn.appendChild(badge);
-});
-
-  // Remove empty state if exists
-  const existing = grid.querySelector('.no-results');
-  if (existing) existing.remove();
-  const filtered = articleCards.filter(card => {
-    const category = card.getAttribute('data-category');
-    const title = card.querySelector('.article-title').textContent.toLowerCase();
-    const excerpt = card.querySelector('.article-excerpt').textContent.toLowerCase();
-    const matchesFilter = activeFilter === 'all' || category === activeFilter;
-    const matchesSearch = title.includes(searchQuery) || excerpt.includes(searchQuery);
-    return matchesFilter && matchesSearch;
-  });
-
-  // Show only up to visibleLimit
-  articleCards.forEach(card => card.classList.add('hidden'));
-  filtered.slice(0, visibleLimit).forEach(card => { card.classList.remove('hidden'); visible++;
-  });
-  visibleCountEl.textContent = filtered.length;
-
-  // Handle Load More visibility
-  if (filtered.length > visibleLimit) {
-    loadMoreBtn.style.display = 'inline-block';
-  } else {
-    loadMoreBtn.style.display = 'none';
-  }
-
-  // Empty state
- // Empty state
+      // Empty state
       if (visible === 0) {
         var empty = document.createElement('div');
         empty.className = 'no-results';
@@ -430,46 +366,37 @@ filterBtns.forEach(btn => {
       });
     }
 
-// FILTER CLICK
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    filterBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    activeFilter = btn.getAttribute('data-filter');
-    visibleLimit = 4; // reset
-    updateArticles();
-  });
-});
-
-// SEARCH INPUT
-  if (searchInput) {
-  searchInput.addEventListener('input', function () {
-    searchQuery = this.value.toLowerCase();
-    visibleLimit = 4;
-    updateArticles();
-  });
-}
-});
-
-// LOAD MORE
-if (loadMoreBtn) {
-  loadMoreBtn.addEventListener('click', () => {
-    visibleLimit += 3;
-    updateArticles();
-  });
-}
-
-// INITIAL RUN
-updateArticles();
+    filterBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        filterBtns.forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        filterArticles(btn.getAttribute('data-filter'));
+      });
+    });  
     
-// Hamburger toggle
+    // Hamburger toggle
 const hb = document.getElementById('hb');
 const navLinks = document.getElementById('navLinks');
 const overlay = document.getElementById('navOverlay');
-function openNav() { hb.classList.add('active'); navLinks.classList.add('open'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
-function closeNav() { hb.classList.remove('active'); navLinks.classList.remove('open'); overlay.classList.remove('active'); document.body.style.overflow = ''; }
-hb.addEventListener('click', () => { navLinks.classList.contains('open') ? closeNav() : openNav(); });
+
+function openNav() {
+  hb.classList.add('active');
+  navLinks.classList.add('open');
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeNav() {
+  hb.classList.remove('active');
+  navLinks.classList.remove('open');
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+hb.addEventListener('click', () => {
+  navLinks.classList.contains('open') ? closeNav() : openNav();
+});
+
 overlay.addEventListener('click', closeNav);
 
 // Close when clicking a link
@@ -480,4 +407,9 @@ document.querySelectorAll('.nav-links a').forEach(link => {
 </body>
 
 </html>
+
+
+
+
+
 
