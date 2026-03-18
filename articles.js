@@ -1,4 +1,4 @@
-const articles = [
+export const articles = [
   {
     title: "How Better Documentation Reduces Project Rework in Agile Teams",
     category: "agile-delivery",
